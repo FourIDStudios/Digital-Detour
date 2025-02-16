@@ -16,7 +16,7 @@ function GenerativeAI.GenerateResponse(input, scenario, messageHistory)
 		["Authorization"] = "Bearer " .. apiKey
 	}
 
-	print( stringify(messageHistory))
+	print( stringify(scenario))
 	local data = {
 		model = "sonar-pro",
 		messages = {
@@ -34,7 +34,11 @@ function GenerativeAI.GenerateResponse(input, scenario, messageHistory)
 			},
 			{
 				role = "system",
-				content = "Use difficulty to influence  you're responses where 5 is the hardest difficulty " .. stringify(scenario)
+				content = "interests and information of the user: " .. stringify(scenario.character)
+			},
+			{
+				role = "system",
+				content = "Use difficulty to influence  you're responses where 5 is the hardest difficulty " .. stringify(scenario.difficulty)
 			},
 			{
 				role = "system",
@@ -95,7 +99,7 @@ function GenerativeAI.EvaluateScenario(scenario, messageHistory)
 			},
 			{
 				role = "user",
-				content = "Based on the scenario difficulty and conversation history, has the player successfully guided the user towards human resources or away from AI dependency? Provide a `RESULT:PASS` or `RESULT:FAIL` answer followed by a brief explanation."
+				content = "Based on the scenario difficulty and conversation history, has the player successfully guided the user towards human resources or away from AI dependency? Provide a `RESULT:PASS` or `RESULT:FAIL` answer followed by a brief explanation. Keep this under 30 words"
 			}
 		}
 	}
