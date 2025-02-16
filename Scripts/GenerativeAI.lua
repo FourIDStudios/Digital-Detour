@@ -87,11 +87,15 @@ function GenerativeAI.EvaluateScenario(scenario, messageHistory)
 			},
 			{
 				role = "system",
+				content = "Be sure to consider the interests and information on the user: " .. stringify(scenario.character)
+			},
+			{
+				role = "system",
 				content = "Conversation history: " .. stringify(messageHistory)
 			},
 			{
 				role = "user",
-				content = "Based on the scenario difficulty and conversation history, has the player successfully guided the user towards human resources and away from AI dependency? Provide a `PASS` or `FAIL` answer followed by a brief explanation."
+				content = "Based on the scenario difficulty and conversation history, has the player successfully guided the user towards human resources or away from AI dependency? Provide a `RESULT:PASS` or `RESULT:FAIL` answer followed by a brief explanation."
 			}
 		}
 	}
@@ -108,7 +112,8 @@ function GenerativeAI.EvaluateScenario(scenario, messageHistory)
 	if success and response.Success then
 		local responseData = HttpService:JSONDecode(response.Body)
 		local evaluation = responseData.choices[1].message.content
-		local passed = string.match(string.lower(evaluation), "^PASS")
+		local passed = string.match(evaluation, "RESULT:PASS")
+		print(passed, evaluation)
 		return passed, evaluation
 	else
 		warn("Failed to evaluate scenario:", response)
